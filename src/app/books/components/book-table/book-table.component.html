@@ -3,6 +3,16 @@
   [tableStyle]="{ 'min-width': '50rem' }"
   [loading]="bookTableStore.isLoading()"
 >
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <p-button
+        icon="pi pi-refresh"
+        rounded
+        raised
+        (click)="bookTableStore.listBooks()"
+      />
+    </div>
+  </ng-template>
   <ng-template #header>
     <tr>
       <th>Name</th>
