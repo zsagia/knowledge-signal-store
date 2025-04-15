@@ -1,6 +1,7 @@
 <p-table
   [value]="bookTableStore.books()"
   [tableStyle]="{ 'min-width': '50rem' }"
+  [loading]="bookTableStore.isLoading()"
 >
   <ng-template #header>
     <tr>

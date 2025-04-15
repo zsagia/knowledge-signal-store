@@ -11,7 +11,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
-import { Book, books } from '../../models';
+import { Book } from '../../models';
 import { BookDataService } from '../../services';
 
 type BookTableState = {
@@ -29,8 +29,8 @@ export const BookTableStore = signalStore(
   withMethods((store, bookDataService = inject(BookDataService)) => ({
     listBooks: rxMethod<void>(
       pipe(
-        debounceTime(3000),
         tap(() => patchState(store, { isLoading: true })),
+        debounceTime(3000),
         switchMap(() => {
           return bookDataService.listBooks().pipe(
             tapResponse({
