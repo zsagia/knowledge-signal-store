@@ -1,0 +1,14 @@
+<p-table [value]="books()" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template #header>
+    <tr>
+      <th>Name</th>
+      <th>Author</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-book>
+    <tr>
+      <td>{{ book.name }}</td>
+      <td>{{ book.author }}</td>
+    </tr>
+  </ng-template>
+</p-table>
