@@ -3,6 +3,7 @@ import {
   signalStore,
   withComputed,
   withHooks,
+  withMethods,
   withProps,
   withState,
 } from '@ngrx/signals';

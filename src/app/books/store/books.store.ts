@@ -28,10 +28,16 @@ const booksStoreConfig = entityConfig({
   selectId: (book) => book.uid,
 });
 
+export type Sort = {
+    field: string;
+    order: number;
+}
+
 export type CustomEntityState = {
   isLoading: boolean;
   newEntityButtonEnabled: boolean;
   selectedBook: Book | null;
+  sort: Sort | null;
 };
 
 export function setNewEntityButtonEnabled(
@@ -50,12 +56,18 @@ export function setLoading(isLoading: boolean): Partial<CustomEntityState> {
   return { isLoading };
 }
 
+export function setSort(sort: Sort): Partial<CustomEntityState> {
+    return { sort };
+  }
+
+
 export function withCustomEntity() {
   return signalStoreFeature(
     withState<CustomEntityState>({
       isLoading: false,
       newEntityButtonEnabled: false,
       selectedBook: null,
+      sort: null
     }),
     withComputed(({ newEntityButtonEnabled }) => ({
       isNewEntityButtonEnabled: computed(() => newEntityButtonEnabled()),
@@ -71,6 +83,10 @@ export function withCustomEntity() {
         setLoading(isLoading: boolean): void {
           patchState(store, setLoading(isLoading));
         },
+        setSort(sort: Sort): void {
+            console.log('sort: ', sort);
+            patchState(store, setSort(sort))
+        }
       };
     })
   );
@@ -84,6 +100,7 @@ export const BooksStore = signalStore(
     _bookDataService: inject(BookDataService),
   })),
   withMethods(({ _bookDataService, ...store }) => ({
+    updateSort(): void {},
     listBooks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),

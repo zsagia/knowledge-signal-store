@@ -1,7 +1,12 @@
+@let sort = bookTableStore.booksStore.sort();
+
 <p-table
   [value]="bookTableStore.books()"
   [tableStyle]="{ 'min-width': '50rem' }"
   [loading]="bookTableStore.booksStore.isLoading()"
+  (onSort)="bookTableStore.booksStore.setSort($event)"
+  [sortField]="sort?.field"
+  [sortOrder]="sort?.order || 1"
 >
   <ng-template #caption>
     <div class="flex items-center justify-between">
@@ -9,16 +14,24 @@
         icon="pi pi-refresh"
         rounded
         raised
-        (click)="bookTableStore.booksStore.listBooks()"
       />
     </div>
   </ng-template>
+
   <ng-template #header>
     <tr>
-      <th>Name</th>
-      <th>Author</th>
+      <th
+        pSortableColumn="name"
+        style="width: 20%"
+      >
+        Name <p-sortIcon field="name" />
+      </th>
+      <th pSortableColumn="author" style="width: 20%">
+        Author <p-sortIcon field="author" />
+      </th>
     </tr>
   </ng-template>
+
   <ng-template #body let-book>
     <tr>
       <td>{{ book.name }}</td>
