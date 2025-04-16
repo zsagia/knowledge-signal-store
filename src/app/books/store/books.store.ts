@@ -18,7 +18,7 @@ import {
 } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
-import { debounceTime, pipe, switchMap } from 'rxjs';
+import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
 import { Book } from '../models';
 import { BookDataService } from '../services';
@@ -86,13 +86,17 @@ export const BooksStore = signalStore(
   withMethods(({ _bookDataService, ...store }) => ({
     listBooks: rxMethod<void>(
       pipe(
+        tap(() => patchState(store, { isLoading: true })),
         debounceTime(3000),
         switchMap(() => {
           return _bookDataService.listBooks().pipe(
             tapResponse({
-              next: (books) =>
+              next: (books) => {
                 patchState(store, setAllEntities(books, booksStoreConfig)),
+                  patchState(store, { isLoading: false });
+              },
               error: (err) => {
+                patchState(store, { isLoading: false });
                 console.error(err);
               },
             })
