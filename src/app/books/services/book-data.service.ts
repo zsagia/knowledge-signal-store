@@ -9,6 +9,7 @@ import { Book, books } from '../models';
 })
 export class BookDataService {
   public listBooks(): Observable<Book[]> {
+    console.log('list books');
     return of(books);
   }
 }

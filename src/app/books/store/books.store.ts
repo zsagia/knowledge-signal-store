@@ -22,6 +22,7 @@ import { BookDataService } from '../services';
 const selectId: SelectEntityId<Book> = (book) => book.uid;
 
 export const BooksStore = signalStore(
+  { providedIn: 'root' },
   withEntities<Book>(),
   withProps(() => ({
     bookDataService: inject(BookDataService),
