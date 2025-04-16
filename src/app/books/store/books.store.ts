@@ -3,12 +3,13 @@ import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
   signalStore,
+  type,
   withHooks,
   withMethods,
   withProps,
 } from '@ngrx/signals';
 import {
-  SelectEntityId,
+  entityConfig,
   setAllEntities,
   withEntities,
 } from '@ngrx/signals/entities';
@@ -19,11 +20,14 @@ import { debounceTime, pipe, switchMap } from 'rxjs';
 import { Book } from '../models';
 import { BookDataService } from '../services';
 
-const selectId: SelectEntityId<Book> = (book) => book.uid;
+const booksStoreConfig = entityConfig({
+  entity: type<Book>(),
+  selectId: (book) => book.uid,
+});
 
 export const BooksStore = signalStore(
   { providedIn: 'root' },
-  withEntities<Book>(),
+  withEntities<Book>(booksStoreConfig),
   withProps(() => ({
     bookDataService: inject(BookDataService),
   })),
@@ -35,7 +39,7 @@ export const BooksStore = signalStore(
           return bookDataService.listBooks().pipe(
             tapResponse({
               next: (books) =>
-                patchState(store, setAllEntities(books, { selectId })),
+                patchState(store, setAllEntities(books, booksStoreConfig)),
               error: (err) => {
                 console.error(err);
               },
