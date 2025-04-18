@@ -30,6 +30,7 @@ export const BookTableStore = signalStore(
   withMethods((store) => ({
     editActionHandler(book: Book) {
       console.log('navigate');
+      store.booksStore.setSelectedBook(book);
       store.router.navigate(['../edit'], { relativeTo: store.activatedRoute});
     },
   })),
@@ -37,9 +38,6 @@ export const BookTableStore = signalStore(
     books: computed(() => booksStore.entities()),
   })),
   withHooks({
-    onInit(store) {
-      store.booksStore.listBooks();
-    },
     onDestroy() {
       console.log('BookTableStore is destroyed');
     },

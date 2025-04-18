@@ -1,1 +1,38 @@
-<p>book-form works!</p>
+@let formGroup = bookFormStore.formGroup(); @if (formGroup) {
+<section>
+  <form [formGroup]="formGroup">
+    <input name="uid" formControlName="uid" hidden />
+
+    <div class="field">
+      <p-floatlabel variant="in">
+        <input type="text" pInputText formControlName="name" />
+        <label for="name">Name</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="field">
+      <p-floatlabel variant="in">
+        <input type="text" pInputText formControlName="author" />
+        <label for="author">Author</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="buttons">
+      <button
+        pButton
+        type="button"
+        label="Submit"
+        (click)="bookFormStore.submit()"
+        [disabled]="!formGroup.valid"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        (click)="bookFormStore.cancel()"
+      ></button>
+    </div>
+  </form>
+</section>
+}

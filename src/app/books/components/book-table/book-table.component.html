@@ -13,7 +13,7 @@
 >
   <ng-template #caption>
     <div class="flex items-center justify-between">
-      <p-button icon="pi pi-refresh" rounded raised />
+      <p-button icon="pi pi-refresh" rounded raised (click)="bookTableStore.booksStore.listBooks()"/>
     </div>
   </ng-template>
 

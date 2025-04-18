@@ -29,9 +29,9 @@ const booksStoreConfig = entityConfig({
 });
 
 export type Sort = {
-    field: string;
-    order: number;
-}
+  field: string;
+  order: number;
+};
 
 export type CustomEntityState = {
   isLoading: boolean;
@@ -57,9 +57,8 @@ export function setLoading(isLoading: boolean): Partial<CustomEntityState> {
 }
 
 export function setSort(sort: Sort): Partial<CustomEntityState> {
-    return { sort };
-  }
-
+  return { sort };
+}
 
 export function withCustomEntity() {
   return signalStoreFeature(
@@ -67,7 +66,7 @@ export function withCustomEntity() {
       isLoading: false,
       newEntityButtonEnabled: false,
       selectedBook: null,
-      sort: null
+      sort: null,
     }),
     withComputed(({ newEntityButtonEnabled }) => ({
       isNewEntityButtonEnabled: computed(() => newEntityButtonEnabled()),
@@ -84,9 +83,9 @@ export function withCustomEntity() {
           patchState(store, setLoading(isLoading));
         },
         setSort(sort: Sort): void {
-            console.log('sort: ', sort);
-            patchState(store, setSort(sort))
-        }
+          console.log('sort: ', sort);
+          patchState(store, setSort(sort));
+        },
       };
     })
   );
@@ -123,8 +122,12 @@ export const BooksStore = signalStore(
     ),
   })),
   withHooks({
-    onInit() {
+    onInit(store) {
+      store.listBooks();
       console.log('BooksStore initialized');
+    },
+    onDestroy() {
+      console.log('BookTableStore is destroyed');
     },
   })
 );
