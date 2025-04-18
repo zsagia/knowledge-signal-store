@@ -1,21 +1,34 @@
 @let sort = bookTableStore.booksStore.sort();
+@let page = bookTableStore.booksStore.page();
 
 <p-table
   [value]="bookTableStore.books()"
   [tableStyle]="{ width: '100%' }"
   [loading]="bookTableStore.booksStore.isLoading()"
   (onSort)="bookTableStore.booksStore.setSort($event)"
+  (onPage)="bookTableStore.booksStore.setPage($event)"
   [sortField]="sort?.field"
   [sortOrder]="sort?.order || 1"
   [paginator]="true"
-  [rows]="2"
+  [first]="page?.first"
+  [rows]="page?.rows"
   [rowsPerPageOptions]="[2, 3, 4]"
 >
   <ng-template #caption>
     <div class="caption">
-      <p-button icon="pi pi-refresh" rounded raised (click)="bookTableStore.booksStore.listBooks()"/>
+      <p-button
+        icon="pi pi-refresh"
+        rounded
+        raised
+        (click)="bookTableStore.booksStore.listBooks()"
+      />
 
-      <p-button label="Create" [raised]="true" severity="info" (click)="bookTableStore.createBookActionHandler()"/>
+      <p-button
+        label="Create"
+        [raised]="true"
+        severity="info"
+        (click)="bookTableStore.createBookActionHandler()"
+      />
     </div>
   </ng-template>
 

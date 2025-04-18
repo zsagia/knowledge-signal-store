@@ -1,6 +1,7 @@
-import { computed, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import {
+  getState,
   patchState,
   signalStore,
   signalStoreFeature,
@@ -22,6 +23,7 @@ import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
 import { Book } from '../models';
 import { BookDataService } from '../services';
+import { TablePageEvent } from 'primeng/table';
 
 const booksStoreConfig = entityConfig({
   entity: type<Book>(),
@@ -33,11 +35,17 @@ export type Sort = {
   order: number;
 };
 
+export type Page = {
+  first: number;
+  rows: number;
+};
+
 export type CustomEntityState = {
   isLoading: boolean;
   newEntityButtonEnabled: boolean;
   selectedBook: Book | null;
   sort: Sort | null;
+  page: Page | null;
 };
 
 export function setNewEntityButtonEnabled(
@@ -60,11 +68,16 @@ export function setSort(sort: Sort): Partial<CustomEntityState> {
   return { sort };
 }
 
+export function setPage(page: Page): Partial<CustomEntityState> {
+  return { page };
+}
+
 export function withCustomEntity() {
   return signalStoreFeature(
     withState<CustomEntityState>({
       isLoading: false,
       newEntityButtonEnabled: false,
+      page: null,
       selectedBook: null,
       sort: null,
     }),
@@ -85,6 +98,10 @@ export function withCustomEntity() {
         setSort(sort: Sort): void {
           console.log('sort: ', sort);
           patchState(store, setSort(sort));
+        },
+        setPage(page: Page): void {
+          console.log('page: ', page);
+          patchState(store, setPage(page));
         },
       };
     })
@@ -123,6 +140,10 @@ export const BooksStore = signalStore(
   })),
   withHooks({
     onInit(store) {
+      effect(() => {
+        const state = getState(store);
+        console.log('books state', state);
+      });
       store.listBooks();
       console.log('BooksStore initialized');
     },
