@@ -1,12 +1,19 @@
 import { Routes } from '@angular/router';
 
-import { BooksAdminComponent } from '../../books/components/books-admin';
 import { AdminComponent } from './admin.component';
 
 export const adminRoutes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    children: [{ path: 'books', component: BooksAdminComponent }],
+    children: [
+      {
+        path: 'books',
+        loadChildren: () =>
+          import('../../books/components/books-admin/books.routes').then(
+            (m) => m.booksRoutes
+          ),
+      },
+    ],
   },
 ];

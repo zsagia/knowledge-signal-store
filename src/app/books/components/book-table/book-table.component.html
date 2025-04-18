@@ -2,7 +2,7 @@
 
 <p-table
   [value]="bookTableStore.books()"
-  [tableStyle]="{ 'min-width': '50rem' }"
+  [tableStyle]="{ width: '100%' }"
   [loading]="bookTableStore.booksStore.isLoading()"
   (onSort)="bookTableStore.booksStore.setSort($event)"
   [sortField]="sort?.field"
@@ -22,9 +22,12 @@
       <th pSortableColumn="name" style="width: 20%">
         Name <p-sortIcon field="name" />
       </th>
+
       <th pSortableColumn="author" style="width: 20%">
         Author <p-sortIcon field="author" />
       </th>
+
+      <th>Action</th>
     </tr>
   </ng-template>
 
@@ -32,6 +35,14 @@
     <tr>
       <td>{{ book.name }}</td>
       <td>{{ book.author }}</td>
+      <td>
+        <p-button
+          icon="pi pi-pencil"
+          [rounded]="true"
+          severity="info"
+          (click)="bookTableStore.editActionHandler(book)"
+        />
+      </td>
     </tr>
   </ng-template>
 </p-table>

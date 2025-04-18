@@ -1,4 +1,5 @@
 import { computed, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   signalStore,
   withComputed,
@@ -7,6 +8,8 @@ import {
   withProps,
   withState,
 } from '@ngrx/signals';
+
+import { Book } from '../../models';
 import { BooksStore } from '../../store/books.store';
 
 type BookTableState = {
@@ -21,6 +24,14 @@ export const BookTableStore = signalStore(
   withState(initialState),
   withProps(() => ({
     booksStore: inject(BooksStore),
+    router: inject(Router),
+    activatedRoute: inject(ActivatedRoute)
+  })),
+  withMethods((store) => ({
+    editActionHandler(book: Book) {
+      console.log('navigate');
+      store.router.navigate(['../edit'], { relativeTo: store.activatedRoute});
+    },
   })),
   withComputed(({ booksStore }) => ({
     books: computed(() => booksStore.entities()),
