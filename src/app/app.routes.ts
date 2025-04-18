@@ -1,15 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { BooksPageComponent } from './pages/books-page';
-
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'books',
+    redirectTo: 'admin',
   },
   {
-    path: 'books',
-    component: BooksPageComponent,
+    path: 'admin',
+    loadChildren: () =>
+      import('./pages/admin/admin.routes').then((m) => m.adminRoutes),
   },
 ];
