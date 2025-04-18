@@ -39,12 +39,11 @@ export const BookFormStore = signalStore(
       const formGroup = store.formGroup();
 
       if (store.selectedBook()) {
-        store._bookDataService.updateBook({ ...formGroup.value });
+        store._booksStore.updateBook({ ...formGroup.value });
       } else {
-        store._bookDataService.createBook({ ...formGroup.value });
+        store._booksStore.createBook({ ...formGroup.value });
       }
       console.log(formGroup);
-      store._booksStore.setSelectedBook(null);
       store._router.navigate(['../'], { relativeTo: store._activatedRoute });
     },
     _createFormGroup() {
@@ -57,7 +56,7 @@ export const BookFormStore = signalStore(
             [Validators.required, Validators.minLength(3)],
           ],
           name: [book?.name, [Validators.required, Validators.minLength(3)]],
-          uid: [book?.uid],
+          id: [book?.id],
         }),
       });
     },
@@ -70,8 +69,9 @@ export const BookFormStore = signalStore(
     onInit(store) {
       store._createFormGroup();
     },
-    onDestroy() {
+    onDestroy(store) {
       console.log('BookFormStore is destroyed');
+      store._booksStore.setSelectedBook(null);
     },
   })
 );

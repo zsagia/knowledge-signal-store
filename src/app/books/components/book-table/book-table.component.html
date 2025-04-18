@@ -10,8 +10,8 @@
   [sortField]="sort?.field"
   [sortOrder]="sort?.order || 1"
   [paginator]="true"
-  [first]="page?.first"
-  [rows]="page?.rows"
+  [first]="page?.first || 0"
+  [rows]="page?.rows || 2"
   [rowsPerPageOptions]="[2, 3, 4]"
 >
   <ng-template #caption>

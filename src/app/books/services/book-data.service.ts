@@ -1,31 +1,28 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable, inject } from "@angular/core";
 
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { Observable } from "rxjs";
 
-import { Book, books } from '../models';
+import { Book} from "../models";
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookDataService {
-  _books = books;
-  books$: Subject<Book[]> = new BehaviorSubject(this._books);
-  public listBooks(): Observable<Book[]> {
-    console.log('list books');
-    return this.books$;
-  }
+  private httpClient = inject(HttpClient);
+  apiUrl = 'http://localhost:3000/books';
 
   public createBook(book: Book): Observable<Book> {
-    book.uid = `id-${new Date().toISOString()}`;
-    this._books.push(book);
-    this.books$.next(this._books);
-    return of(book);
+    book.id = `id-${new Date().toISOString()}`;
+   
+    return this.httpClient.post<Book>(this.apiUrl, book);
+  }
+
+  public listBooks(): Observable<Book[]> {
+    return this.httpClient.get<Book[]>(this.apiUrl);
   }
 
   public updateBook(book: Book): Observable<Book> {
-    const index = books.findIndex((_book) => _book.uid === book.uid);
-    this._books[index] = book;
-    this.books$.next(this._books);
-    return of(book);
+    return this.httpClient.put<Book>(`${this.apiUrl}/${book.id}`, book);
   }
 }

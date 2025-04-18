@@ -1,0 +1,34 @@
+{
+  "books": [
+    {
+      "author": "Karl May",
+      "name": "Old Shatterhand",
+      "id": "1a"
+    },
+    {
+      "id": "1b",
+      "name": "Old Death",
+      "author": "Karl May"
+    },
+    {
+      "id": "1c",
+      "name": "Old Firehand",
+      "author": "Karl May"
+    },
+    {
+      "id": "1d",
+      "name": "Winnetou",
+      "author": "Karl May"
+    },
+    {
+      "id": "1e",
+      "name": "The Last of the Mohicans",
+      "author": "James Fenimore Cooper"
+    },
+    {
+      "id": "id-2025-04-18T19:59:50.666Z",
+      "author": "J.R.R. Tolkien",
+      "name": " The Lord of the Rings"
+    }
+  ]
+}

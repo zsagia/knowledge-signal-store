@@ -13,8 +13,10 @@ import {
   withState,
 } from '@ngrx/signals';
 import {
+  addEntity,
   entityConfig,
   setAllEntities,
+  updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -23,11 +25,10 @@ import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
 import { Book } from '../models';
 import { BookDataService } from '../services';
-import { TablePageEvent } from 'primeng/table';
 
 const booksStoreConfig = entityConfig({
   entity: type<Book>(),
-  selectId: (book) => book.uid,
+  selectId: (book) => book.id,
 });
 
 export type Sort = {
@@ -117,6 +118,26 @@ export const BooksStore = signalStore(
   })),
   withMethods(({ _bookDataService, ...store }) => ({
     updateSort(): void {},
+    createBook: rxMethod<Book>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true })),
+        debounceTime(3000),
+        switchMap((book) => {
+          return _bookDataService.createBook(book).pipe(
+            tapResponse({
+              next: (book) => {
+                patchState(store, addEntity(book));
+                patchState(store, { isLoading: false });
+              },
+              error: (err) => {
+                patchState(store, { isLoading: false });
+                console.error(err);
+              },
+            })
+          );
+        })
+      )
+    ),
     listBooks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
@@ -127,6 +148,26 @@ export const BooksStore = signalStore(
               next: (books) => {
                 patchState(store, setAllEntities(books, booksStoreConfig)),
                   patchState(store, { isLoading: false });
+              },
+              error: (err) => {
+                patchState(store, { isLoading: false });
+                console.error(err);
+              },
+            })
+          );
+        })
+      )
+    ),
+    updateBook: rxMethod<Book>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true })),
+        debounceTime(3000),
+        switchMap((book) => {
+          return _bookDataService.updateBook(book).pipe(
+            tapResponse({
+              next: (book) => {
+                patchState(store, updateEntity({ id: book.id, changes: book }));
+                patchState(store, { isLoading: false });
               },
               error: (err) => {
                 patchState(store, { isLoading: false });
