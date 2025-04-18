@@ -28,6 +28,9 @@ export const BookTableStore = signalStore(
     activatedRoute: inject(ActivatedRoute)
   })),
   withMethods((store) => ({
+    createBookActionHandler(){
+      store.router.navigate(['../edit'], { relativeTo: store.activatedRoute});
+    },
     editActionHandler(book: Book) {
       console.log('navigate');
       store.booksStore.setSelectedBook(book);

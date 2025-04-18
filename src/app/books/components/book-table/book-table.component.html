@@ -12,8 +12,10 @@
   [rowsPerPageOptions]="[2, 3, 4]"
 >
   <ng-template #caption>
-    <div class="flex items-center justify-between">
+    <div class="caption">
       <p-button icon="pi pi-refresh" rounded raised (click)="bookTableStore.booksStore.listBooks()"/>
+
+      <p-button label="Create" [raised]="true" severity="info" (click)="bookTableStore.createBookActionHandler()"/>
     </div>
   </ng-template>
 
