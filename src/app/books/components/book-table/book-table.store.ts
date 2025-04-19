@@ -10,7 +10,8 @@ import {
 } from '@ngrx/signals';
 
 import { Book } from '../../models';
-import { BooksStore } from '../../store/books.store';
+import { BooksStore, Page, Sort } from '../../store/books.store';
+import { BookUtilService } from '../../services';
 
 type BookTableState = {
   isLoading: boolean;
@@ -24,23 +25,45 @@ export const BookTableStore = signalStore(
   withState(initialState),
   withProps(() => ({
     booksStore: inject(BooksStore),
+    _bookUtilService: inject(BookUtilService),
     router: inject(Router),
-    activatedRoute: inject(ActivatedRoute)
+    activatedRoute: inject(ActivatedRoute),
   })),
   withMethods((store) => ({
-    createBookActionHandler(){
-      store.router.navigate(['../edit'], { relativeTo: store.activatedRoute});
+    createBookActionHandler() {
+      store.router.navigate(['../edit'], { relativeTo: store.activatedRoute });
     },
     editActionHandler(book: Book) {
       console.log('navigate');
       store.booksStore.setSelectedBook(book);
-      store.router.navigate(['../edit'], { relativeTo: store.activatedRoute});
+      store.router.navigate(['../edit'], { relativeTo: store.activatedRoute });
+    },
+    onPageChange(page: Page) {
+      store.booksStore.setPage(page);
+      const params = store._bookUtilService.createQueryParams();
+
+      store.booksStore.listBooks(params);
+    },
+    onSortChange(sort: Sort) {
+      const _sort = store.booksStore.sort();
+
+      if (sort.field !== _sort?.field || sort.order !== _sort?.order) {
+        store.booksStore.setSort(sort);
+        const params = store._bookUtilService.createQueryParams();
+
+        store.booksStore.listBooks(params);
+      }
     },
   })),
   withComputed(({ booksStore }) => ({
     books: computed(() => booksStore.entities()),
   })),
   withHooks({
+    onInit(store) {
+      const params = store._bookUtilService.createQueryParams();
+
+      store.booksStore.listBooks(params);
+    },
     onDestroy() {
       console.log('BookTableStore is destroyed');
     },

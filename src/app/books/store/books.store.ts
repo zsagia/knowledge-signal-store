@@ -37,8 +37,8 @@ export type Sort = {
 };
 
 export type Page = {
-  first: number;
-  rows: number;
+  first?: number;
+  rows?: number;
 };
 
 export type CustomEntityState = {
@@ -47,6 +47,7 @@ export type CustomEntityState = {
   selectedBook: Book | null;
   sort: Sort | null;
   page: Page | null;
+  count: number;
 };
 
 export function setNewEntityButtonEnabled(
@@ -73,6 +74,10 @@ export function setPage(page: Page): Partial<CustomEntityState> {
   return { page };
 }
 
+export function setCount(count: number): Partial<CustomEntityState> {
+  return { count };
+}
+
 export function withCustomEntity() {
   return signalStoreFeature(
     withState<CustomEntityState>({
@@ -81,6 +86,7 @@ export function withCustomEntity() {
       page: null,
       selectedBook: null,
       sort: null,
+      count: 0,
     }),
     withComputed(({ newEntityButtonEnabled }) => ({
       isNewEntityButtonEnabled: computed(() => newEntityButtonEnabled()),
@@ -103,6 +109,9 @@ export function withCustomEntity() {
         setPage(page: Page): void {
           console.log('page: ', page);
           patchState(store, setPage(page));
+        },
+        setCount(count: number): void {
+          patchState(store, setCount(count));
         },
       };
     })
@@ -138,12 +147,28 @@ export const BooksStore = signalStore(
         })
       )
     ),
-    listBooks: rxMethod<void>(
+    getBooksCount: rxMethod<void>(
+      pipe(
+        switchMap(() => {
+          return _bookDataService.getLength().pipe(
+            tapResponse({
+              next: (count) => {
+                patchState(store, setCount(count));
+              },
+              error: (err) => {
+                console.error(err);
+              },
+            })
+          );
+        })
+      )
+    ),
+    listBooks: rxMethod<string[]>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
-        debounceTime(3000),
-        switchMap(() => {
-          return _bookDataService.listBooks().pipe(
+        debounceTime(1000),
+        switchMap((params) => {
+          return _bookDataService.listBooks(params).pipe(
             tapResponse({
               next: (books) => {
                 patchState(store, setAllEntities(books, booksStoreConfig)),
@@ -161,7 +186,7 @@ export const BooksStore = signalStore(
     updateBook: rxMethod<Book>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
-        debounceTime(3000),
+        debounceTime(1000),
         switchMap((book) => {
           return _bookDataService.updateBook(book).pipe(
             tapResponse({
@@ -185,8 +210,7 @@ export const BooksStore = signalStore(
         const state = getState(store);
         console.log('books state', state);
       });
-      store.listBooks();
-      console.log('BooksStore initialized');
+      store.getBooksCount();
     },
     onDestroy() {
       console.log('BookTableStore is destroyed');
