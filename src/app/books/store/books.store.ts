@@ -1,4 +1,4 @@
-import { computed, effect, inject } from '@angular/core';
+import { computed, effect, inject, resource } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import {
   getState,
@@ -25,6 +25,7 @@ import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
 import { Book } from '../models';
 import { BookDataService } from '../services';
+import { BooksResourceService } from '../resource';
 
 const booksStoreConfig = entityConfig({
   entity: type<Book>(),
@@ -45,8 +46,8 @@ export type CustomEntityState = {
   isLoading: boolean;
   newEntityButtonEnabled: boolean;
   selectedBook: Book | null;
-  sort: Sort | null;
-  page: Page | null;
+  sort: Sort;
+  page: Page;
   count: number;
 };
 
@@ -83,9 +84,9 @@ export function withCustomEntity() {
     withState<CustomEntityState>({
       isLoading: false,
       newEntityButtonEnabled: false,
-      page: null,
+      page: { first: 0, rows: 2 },
       selectedBook: null,
-      sort: null,
+      sort: { field: 'name', order: 1 },
       count: 0,
     }),
     withComputed(({ newEntityButtonEnabled }) => ({
@@ -122,8 +123,15 @@ export const BooksStore = signalStore(
   { providedIn: 'root' },
   withEntities<Book>(booksStoreConfig),
   withCustomEntity(),
-  withProps(() => ({
+  withProps((store) => ({
     _bookDataService: inject(BookDataService),
+    _booksResourceService: inject(BooksResourceService),
+  })),
+  withProps((store) => ({
+    _booksResource: store._booksResourceService.booksResource(
+      store.sort,
+      store.page
+    ),
   })),
   withMethods(({ _bookDataService, ...store }) => ({
     updateSort(): void {},
@@ -163,26 +171,18 @@ export const BooksStore = signalStore(
         })
       )
     ),
-    listBooks: rxMethod<string[]>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        debounceTime(1000),
-        switchMap((params) => {
-          return _bookDataService.listBooks(params).pipe(
-            tapResponse({
-              next: (books) => {
-                patchState(store, setAllEntities(books, booksStoreConfig)),
-                  patchState(store, { isLoading: false });
-              },
-              error: (err) => {
-                patchState(store, { isLoading: false });
-                console.error(err);
-              },
-            })
-          );
-        })
-      )
-    ),
+    listBooks: () => {
+      const resource = store._booksResource;
+
+      effect(() => {
+        const value = resource.value();
+
+        patchState(store, setAllEntities(value || [], booksStoreConfig));
+      })
+    },
+    reloadBooks: () => {
+      store._booksResource.reload();
+    },
     updateBook: rxMethod<Book>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),

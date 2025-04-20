@@ -38,4 +38,8 @@ export class BookTableComponent implements AfterViewInit {
       this.paginator.rows = page?.rows || 2;
     });
   }
+
+  reloadBooks() {
+    this.bookTableStore.booksStore.reloadBooks();
+  }
 }

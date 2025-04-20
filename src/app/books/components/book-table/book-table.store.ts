@@ -34,24 +34,17 @@ export const BookTableStore = signalStore(
       store.router.navigate(['../edit'], { relativeTo: store.activatedRoute });
     },
     editActionHandler(book: Book) {
-      console.log('navigate');
       store.booksStore.setSelectedBook(book);
       store.router.navigate(['../edit'], { relativeTo: store.activatedRoute });
     },
     onPageChange(page: Page) {
       store.booksStore.setPage(page);
-      const params = store._bookUtilService.createQueryParams();
-
-      store.booksStore.listBooks(params);
     },
     onSortChange(sort: Sort) {
       const _sort = store.booksStore.sort();
 
       if (sort.field !== _sort?.field || sort.order !== _sort?.order) {
         store.booksStore.setSort(sort);
-        const params = store._bookUtilService.createQueryParams();
-
-        store.booksStore.listBooks(params);
       }
     },
   })),
@@ -60,9 +53,7 @@ export const BookTableStore = signalStore(
   })),
   withHooks({
     onInit(store) {
-      const params = store._bookUtilService.createQueryParams();
-
-      store.booksStore.listBooks(params);
+      store.booksStore.listBooks();
     },
     onDestroy() {
       console.log('BookTableStore is destroyed');

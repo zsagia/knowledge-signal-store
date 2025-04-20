@@ -3,12 +3,13 @@
   [value]="bookTableStore.books()"
   [tableStyle]="{ width: '100%' }"
   [loading]="bookTableStore.booksStore.isLoading()"
-  (sortFunction)="bookTableStore.onSortChange($event)" [customSort]="true"
+  (sortFunction)="bookTableStore.onSortChange($event)"
+  [customSort]="true"
   [paginator]="false"
 >
   <ng-template #caption>
     <div class="caption">
-      <p-button icon="pi pi-refresh" rounded raised />
+      <p-button icon="pi pi-refresh" rounded raised (click)="reloadBooks()" />
 
       <p-button
         label="Create"

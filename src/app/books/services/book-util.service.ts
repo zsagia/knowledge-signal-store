@@ -1,17 +1,15 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { BooksStore, Page, Sort } from '../store';
+import { Page, Sort } from '../store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookUtilService {
-  private store = inject(BooksStore);
-
-  public createQueryParams(): string[] {
+  public createQueryParams(sort: Sort, page: Page): string[] {
     return [
-      this.createSortParam(this.store.sort()),
-      ...this.createPageParams(this.store.page()),
+      this.createSortParam(sort),
+      ...this.createPageParams(page),
     ];
   }
 
