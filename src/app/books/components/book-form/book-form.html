@@ -1,4 +1,6 @@
-@let formGroup = bookFormStore.formGroup(); @if (formGroup) {
+@let formGroup = bookFormStore.formGroup();
+
+@if (formGroup) {
 <section>
   <form [formGroup]="formGroup">
     <input name="id" formControlName="id" hidden />

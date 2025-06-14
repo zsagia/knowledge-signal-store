@@ -1,4 +1,4 @@
-import { computed, effect, inject, resource } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import {
   getState,
@@ -24,8 +24,8 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
 import { Book } from '../models';
-import { BookDataService } from '../services';
-import { BooksResourceService } from '../resource';
+import { BookData } from '../services';
+import { BooksResource } from '../resource';
 
 const booksStoreConfig = entityConfig({
   entity: type<Book>(),
@@ -124,11 +124,11 @@ export const BooksStore = signalStore(
   withEntities<Book>(booksStoreConfig),
   withCustomEntity(),
   withProps((store) => ({
-    _bookDataService: inject(BookDataService),
-    _booksResourceService: inject(BooksResourceService),
+    _bookDataService: inject(BookData),
+    _booksResource: inject(BooksResource),
   })),
   withProps((store) => ({
-    _booksResource: store._booksResourceService.booksResource(
+    _booksResource: store._booksResource.booksResource(
       store.sort,
       store.page
     ),

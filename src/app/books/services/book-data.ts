@@ -8,7 +8,7 @@ import { Book } from '../models';
 @Injectable({
   providedIn: 'root',
 })
-export class BookDataService {
+export class BookData {
   private httpClient = inject(HttpClient);
   apiUrl = 'http://localhost:3000/books';
 

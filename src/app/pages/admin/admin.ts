@@ -4,9 +4,9 @@ import { RouterModule } from '@angular/router';
 @Component({
   imports: [RouterModule],
   selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss',
+  templateUrl: './admin.html',
+  styleUrl: './admin.scss',
 })
-export class AdminComponent {
+export class Admin {
   public title = 'Admin';
 }

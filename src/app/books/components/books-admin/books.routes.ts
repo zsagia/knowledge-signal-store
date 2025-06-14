@@ -1,21 +1,21 @@
 import { Routes } from '@angular/router';
 
-import { BooksAdminEditComponent } from '../books-admin-edit';
-import { BooksAdminListComponent } from '../books-admin-list';
-import { BooksAdminComponent } from './books-admin.component';
+import { BooksAdminEdit } from '../books-admin-edit';
+import { BooksAdminList } from '../books-admin-list';
+import { BooksAdmin } from './books-admin';
 
 export const booksRoutes: Routes = [
   {
     path: '',
-    component: BooksAdminComponent,
+    component: BooksAdmin,
     children: [
       {
         path: '',
         pathMatch: 'full',
         redirectTo: 'list',
       },
-      { path: 'list', component: BooksAdminListComponent },
-      { path: 'edit', component: BooksAdminEditComponent },
+      { path: 'list', component: BooksAdminList },
+      { path: 'edit', component: BooksAdminEdit },
     ],
   },
 ];

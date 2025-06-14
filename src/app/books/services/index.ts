@@ -1,2 +1,2 @@
-export * from './book-data.service';
-export * from './book-util.service';
+export * from './book-data';
+export * from './book-util';

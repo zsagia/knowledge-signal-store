@@ -18,9 +18,9 @@ import { ButtonModule } from 'primeng/button';
     FloatLabelModule,
     InputTextModule,
   ],
-  templateUrl: './book-form.component.html',
-  styleUrl: './book-form.component.scss',
+  templateUrl: './book-form.html',
+  styleUrl: './book-form.scss',
 })
-export class BookFormComponent {
+export class BookForm {
   public bookFormStore = inject(BookFormStore);
 }

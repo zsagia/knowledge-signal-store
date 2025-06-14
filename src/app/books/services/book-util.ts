@@ -5,7 +5,7 @@ import { Page, Sort } from '../store';
 @Injectable({
   providedIn: 'root',
 })
-export class BookUtilService {
+export class BookUtil {
   public createQueryParams(sort: Sort, page: Page): string[] {
     return [
       this.createSortParam(sort),

@@ -11,7 +11,7 @@ import {
 
 import { Book } from '../../models';
 import { BooksStore, Page, Sort } from '../../store/books.store';
-import { BookUtilService } from '../../services';
+import { BookUtil } from '../../services';
 
 type BookTableState = {
   isLoading: boolean;
@@ -25,7 +25,7 @@ export const BookTableStore = signalStore(
   withState(initialState),
   withProps(() => ({
     booksStore: inject(BooksStore),
-    _bookUtilService: inject(BookUtilService),
+    _bookUtilService: inject(BookUtil),
     router: inject(Router),
     activatedRoute: inject(ActivatedRoute),
   })),

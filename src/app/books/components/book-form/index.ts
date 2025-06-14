@@ -1,1 +1,1 @@
-export * from './book-form.component';
+export * from './book-form';

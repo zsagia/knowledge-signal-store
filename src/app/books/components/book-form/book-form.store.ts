@@ -12,7 +12,7 @@ import {
 } from '@ngrx/signals';
 
 import { BooksStore } from '../../store/books.store';
-import { BookDataService } from '../../services';
+import { BookData } from '../../services';
 
 type BookFormState = {
   formGroup: FormGroup;
@@ -27,7 +27,7 @@ export const BookFormStore = signalStore(
   withProps(() => ({
     _activatedRoute: inject(ActivatedRoute),
     _booksStore: inject(BooksStore),
-    _bookDataService: inject(BookDataService),
+    _bookDataService: inject(BookData),
     _formBuilder: inject(FormBuilder),
     _router: inject(Router),
   })),

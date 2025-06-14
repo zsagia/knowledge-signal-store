@@ -1,1 +1,1 @@
-export * from './books-admin-list.component';
+export * from './books-admin-list';

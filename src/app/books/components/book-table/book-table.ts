@@ -16,11 +16,11 @@ import { BookTableStore } from './book-table.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ButtonModule, TableModule, PaginatorModule],
   providers: [BookTableStore],
-  templateUrl: './book-table.component.html',
+  templateUrl: './book-table.html',
   selector: 'app-book-table',
-  styleUrl: './book-table.component.scss',
+  styleUrl: './book-table.scss',
 })
-export class BookTableComponent implements AfterViewInit {
+export class BookTable implements AfterViewInit {
   public bookTableStore = inject(BookTableStore);
 
   @ViewChild('table') table!: Table;

@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 
-import { AdminComponent } from './admin.component';
+import { Admin } from './admin';
 
 export const adminRoutes: Routes = [
   {
     path: '',
-    component: AdminComponent,
+    component: Admin,
     children: [
       {
         path: 'books',

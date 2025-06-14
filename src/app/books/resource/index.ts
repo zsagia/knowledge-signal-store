@@ -1,1 +1,1 @@
-export * from './books.resource.service';
+export * from './books.resource';

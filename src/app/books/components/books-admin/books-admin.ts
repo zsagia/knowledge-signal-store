@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-books-admin',
   imports: [RouterOutlet],
-  templateUrl: './books-admin.component.html',
-  styleUrl: './books-admin.component.scss',
+  templateUrl: './books-admin.html',
+  styleUrl: './books-admin.scss',
 })
-export class BooksAdminComponent {}
+export class BooksAdmin {}
